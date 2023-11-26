@@ -1,20 +1,47 @@
 // tetris.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <thread>
+#include <chrono>
 #include <iostream>
+#include "game.h"
+#include <condition_variable>
+#include <Windows.h>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+std::condition_variable cv;
+std::mutex m;
+
+void timer_start(unsigned int interval) {
+    std::thread([interval]()
+        {
+            while (true)
+            {
+                cv.notify_one();
+                std::this_thread::sleep_for(std::chrono::milliseconds(interval)); // Sleep for the interval
+            }
+        }).detach(); // Detach the thread
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void ShowConsoleCursor(bool showFlag)
+{
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+    CONSOLE_CURSOR_INFO     cursorInfo;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = showFlag; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+}
+
+int main() {
+    ShowConsoleCursor(false);
+    timer_start(500); // Start a timer that sets the flag every 1000 milliseconds
+    std::unique_lock<std::mutex> lock(m);
+
+    while (true)
+    {
+        cv.wait(lock);
+        Game::getInstance().tick();
+    }
+    return 0;
+}
