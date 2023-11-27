@@ -5,6 +5,18 @@
  */
 class Game
 {
+private:
+	char command;
+
+	/**
+	 * @brief: Private constructor to prevent instantiation from outside
+	 */
+	Game();
+
+	Game(const Game&) = delete; // Delete the copy constructor
+
+	Game& operator=(const Game&) = delete; // Delete the assignment operator
+
 public:
 
 	/**
@@ -17,14 +29,13 @@ public:
 	 */
 	void tick();
 
-private:
+	/**
+	 * @brief: load command to be executed in the next frame  
+	 */
+	void loadCommand(const char c);
 
-	// Private constructor to prevent instantiation from outside
-	Game();
-
-	// Delete the copy constructor
-	Game(const Game&) = delete;
-
-	// Delete the assignment operator
-	Game& operator=(const Game&) = delete;
+	/**
+	 * @brief: clear command
+	 */
+	void clearCommand(const char c);
 };

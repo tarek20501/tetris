@@ -1,6 +1,8 @@
-#include "game.h"
 #include <iostream>
 #include <Windows.h>
+
+#include "game.h"
+#include "console.h"
 
 Game& Game::getInstance()
 {
@@ -8,29 +10,36 @@ Game& Game::getInstance()
 	return instance;
 }
 
-void SetCursorPosition(char x, char y) {
-	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	std::cout.flush();
-	COORD coord = { (SHORT)x, (SHORT)y };
-	SetConsoleCursorPosition(hOut, coord);
-}
-
 void Game::tick()
 {
 	static bool exist = true;
-	SetCursorPosition(0, 0);
+	Console::setCursorPosition(0, 0);
 	if (exist)
 	{
-		std::cout << "[]";
+		std::cout << command;
 	}
 	else
 	{
-		std::cout << "  ";
+		std::cout << ' ';
 	}
 	exist = !exist;
 }
 
-Game::Game()
-{
+Game::Game(): command(' ')
+{}
 
+void Game::loadCommand(const char c)
+{
+	if (command == ' ')
+	{
+		command = c;
+	}
+}
+
+void Game::clearCommand(const char c)
+{
+	if (c == command)
+	{
+		command = ' ';
+	}
 }
