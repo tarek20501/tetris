@@ -1,5 +1,23 @@
 #pragma once
 
+#include "console.h"
+
+constexpr unsigned int WIDTH = 20;
+constexpr unsigned int HEIGHT = 10;
+
+enum class Direction
+{
+	Neither,
+	Left,
+	Right
+};
+
+struct Location
+{
+	int x;
+	int y;
+};
+
 /**
  * @brief: Singleton class managing the game play by frame 
  */
@@ -7,6 +25,10 @@ class Game
 {
 private:
 	char command;
+	Console& console;
+	Direction direction;
+	Location location;
+	bool bitMap[HEIGHT][WIDTH];
 
 	/**
 	 * @brief: Private constructor to prevent instantiation from outside
@@ -29,13 +51,6 @@ public:
 	 */
 	void tick();
 
-	/**
-	 * @brief: load command to be executed in the next frame  
-	 */
-	void loadCommand(const char c);
-
-	/**
-	 * @brief: clear command
-	 */
-	void clearCommand(const char c);
+	void goLeft();
+	void goRight();
 };

@@ -3,6 +3,17 @@
 
 #include "console.h"
 
+Console::Console()
+{
+    showCursor(false);
+}
+
+Console& Console::getInstance()
+{
+    static Console console;
+    return console;
+}
+
 void Console::showCursor(bool showFlag)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);

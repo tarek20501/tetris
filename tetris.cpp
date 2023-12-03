@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <Windows.h>
+#include <conio.h>
 
 #include "game.h"
 #include "console.h"
@@ -14,7 +15,6 @@ using namespace std;
 
 condition_variable cv;      // condition variable to signal the main thread
 mutex m;                    // mutex to protect the shared data
-bool event = false;         // event flag
 char command;               // holds the last keypress
 bool alive = true;          // game is running
 
@@ -28,7 +28,6 @@ void timerThread(int interval)
 
         // Lock the mutex and set the event flag to 1
         lock_guard<mutex> lock(m);
-        event = true;
 
         // Notify the main thread
         cv.notify_one();
@@ -41,32 +40,37 @@ void keyboardThread()
     Game& game = Game::getInstance();
     while (alive)
     {
-        if (GetAsyncKeyState(VK_LEFT) & 0x8000) { // Check if left arrow is pressed
-            game.loadCommand('L');
-        }
-        else if (!(GetAsyncKeyState(VK_LEFT) & 0x8000)) { // Check if left arrow is released
-            game.clearCommand('L');
-        }
+        const int LEFT_ARROW = 75;
+        const int RIGHT_ARROW = 77;
+        unsigned char ch = _getch(); // get a character from the keyboard
 
-        if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { // Check if right arrow is pressed
-            game.loadCommand('R');
+        if (ch == 0 || ch == 224) // if the first value is 0 or 224, then it is an arrow key
+        {
+            ch = _getch(); // get the second value of the arrow key
+
+            switch (ch)
+            {
+            case LEFT_ARROW:
+                game.goLeft();
+                break;
+            case RIGHT_ARROW:
+                game.goRight();
+                break;
+            default:
+                break;
+            }
         }
-        else if (!(GetAsyncKeyState(VK_RIGHT) & 0x8000)) { // Check if right arrow is released
-            game.clearCommand('R');
-        }
-        
-        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+        else if (ch == 27) // if the character is ESC, then exit the loop
+        {
             alive = false;
         }
-
-        this_thread::sleep_for(chrono::milliseconds(1));
     }
 }
 
 int main()
 {
     // Create a thread for the timer event
-    thread timer(timerThread, 50);
+    thread timer(timerThread, FRAME_PERIOD_MS);
 
     // Create a thread for the key press event
     thread keyboard(keyboardThread);
@@ -75,7 +79,6 @@ int main()
     timer.detach();
     keyboard.detach();
 
-    Console::showCursor(false);
     Game& game = Game::getInstance();
 
     // Main loop
@@ -86,13 +89,7 @@ int main()
         cv.wait(lock);
 
         // Check the event flag and handle accordingly
-        if (event)
-        {
-            game.tick();
-        }
-
-        // Reset the event flag
-        event = false;
+        game.tick();
     }
 
     if (timer.joinable())

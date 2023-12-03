@@ -12,34 +12,57 @@ Game& Game::getInstance()
 
 void Game::tick()
 {
-	static bool exist = true;
-	Console::setCursorPosition(0, 0);
-	if (exist)
+	static int fall = 0;
+	console.setCursorPosition(0, 0);
+
+	bitMap[location.y][location.x] = false;
+
+	switch (direction)
 	{
-		std::cout << command;
+	case Direction::Left:
+		location.x = (location.x != 0) ? location.x - 1 : (WIDTH - 1);
+		direction = Direction::Neither;
+		break;
+	case Direction::Right:
+		location.x = (location.x + 1) % WIDTH;
+		direction = Direction::Neither;
+		break;
+	case Direction::Neither:
+	default:
+		break;
 	}
-	else
+
+	fall = (fall + 1) % FALL_FACTOR;
+	if (fall == 0)
 	{
-		std::cout << ' ';
+		location.y = (location.y + 1) % HEIGHT;
 	}
-	exist = !exist;
+	
+
+	bitMap[location.y][location.x] = true;
+
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			std::cout << bitMap[y][x];
+		}
+		std::cout << std::endl;
+	}
 }
 
-Game::Game(): command(' ')
+Game::Game(): 
+	command(' '), 
+	console(Console::getInstance()),
+	direction(Direction::Neither),
+	location({0,0}),
+	bitMap{ {false} }
 {}
 
-void Game::loadCommand(const char c)
+void Game::goLeft()
 {
-	if (command == ' ')
-	{
-		command = c;
-	}
+	direction = Direction::Left;
 }
 
-void Game::clearCommand(const char c)
+void Game::goRight()
 {
-	if (c == command)
-	{
-		command = ' ';
-	}
+	direction = Direction::Right;
 }
