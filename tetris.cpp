@@ -15,7 +15,6 @@ using namespace std;
 
 condition_variable cv;      // condition variable to signal the main thread
 mutex m;                    // mutex to protect the shared data
-char command;               // holds the last keypress
 bool alive = true;          // game is running
 
 // A function to handle the timer event

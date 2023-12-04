@@ -1,9 +1,8 @@
 #pragma once
 
-#include "console.h"
+#include<array>
 
-constexpr unsigned int WIDTH = 20;
-constexpr unsigned int HEIGHT = 10;
+#include "console.h"
 
 enum class Direction
 {
@@ -24,11 +23,10 @@ struct Location
 class Game
 {
 private:
-	char command;
 	Console& console;
 	Direction direction;
 	Location location;
-	bool bitMap[HEIGHT][WIDTH];
+	BitMap bitMap;
 
 	/**
 	 * @brief: Private constructor to prevent instantiation from outside

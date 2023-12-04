@@ -13,7 +13,6 @@ Game& Game::getInstance()
 void Game::tick()
 {
 	static int fall = 0;
-	console.setCursorPosition(0, 0);
 
 	bitMap[location.y][location.x] = false;
 
@@ -41,16 +40,10 @@ void Game::tick()
 
 	bitMap[location.y][location.x] = true;
 
-	for (int y = 0; y < HEIGHT; y++) {
-		for (int x = 0; x < WIDTH; x++) {
-			std::cout << bitMap[y][x];
-		}
-		std::cout << std::endl;
-	}
+	console.renderNextFrame(bitMap);
 }
 
 Game::Game(): 
-	command(' '), 
 	console(Console::getInstance()),
 	direction(Direction::Neither),
 	location({0,0}),
