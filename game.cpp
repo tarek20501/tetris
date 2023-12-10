@@ -14,16 +14,14 @@ void Game::tick()
 {
 	static int fall = 0;
 
-	bitMap[location.y][location.x] = false;
-
 	switch (direction)
 	{
 	case Direction::Left:
-		location.x = (location.x != 0) ? location.x - 1 : (WIDTH - 1);
+		piece.setLocation(piece.getLeft());
 		direction = Direction::Neither;
 		break;
 	case Direction::Right:
-		location.x = (location.x + 1) % WIDTH;
+		piece.setLocation(piece.getRight());
 		direction = Direction::Neither;
 		break;
 	case Direction::Neither:
@@ -34,20 +32,15 @@ void Game::tick()
 	fall = (fall + 1) % FALL_FACTOR;
 	if (fall == 0)
 	{
-		location.y = (location.y + 1) % HEIGHT;
+		piece.setLocation(piece.getDown());
 	}
-	
 
-	bitMap[location.y][location.x] = true;
-
-	console.renderNextFrame(bitMap);
+	piece.move();
 }
 
 Game::Game(): 
-	console(Console::getInstance()),
 	direction(Direction::Neither),
-	location({0,0}),
-	bitMap{ {false} }
+	piece()
 {}
 
 void Game::goLeft()

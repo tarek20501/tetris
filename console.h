@@ -2,17 +2,15 @@
 
 #include <array>
 
-constexpr int FRAME_PERIOD_MS = 100;
-constexpr int FALL_FACTOR = 10;
-constexpr unsigned int WIDTH = 20;
-constexpr unsigned int HEIGHT = 20;
+constexpr int FRAME_PERIOD_MS = 20;
+constexpr int FALL_FACTOR = 50;
+constexpr int WIDTH = 20;
+constexpr int HEIGHT = 20;
 using BitMap = std::array<std::array<bool, WIDTH>, HEIGHT>;
 
 class Console
 {
 private:
-	BitMap bitMap;
-
 	Console();
 	Console(const Console&) = delete;
 	Console& operator=(const Console&) = delete;
@@ -23,5 +21,6 @@ private:
 
 public:
 	static Console& getInstance();
-	void renderNextFrame(BitMap& nextBitMap);
+	static void drawBlock(int x, int y);
+	static void eraseBlock(int x, int y);
 };

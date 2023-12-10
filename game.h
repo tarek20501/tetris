@@ -3,6 +3,7 @@
 #include<array>
 
 #include "console.h"
+#include "piece.h"
 
 enum class Direction
 {
@@ -11,22 +12,14 @@ enum class Direction
 	Right
 };
 
-struct Location
-{
-	int x;
-	int y;
-};
-
 /**
  * @brief: Singleton class managing the game play by frame 
  */
 class Game
 {
 private:
-	Console& console;
+	Piece piece;
 	Direction direction;
-	Location location;
-	BitMap bitMap;
 
 	/**
 	 * @brief: Private constructor to prevent instantiation from outside

@@ -46,7 +46,7 @@ void Console::intializeWindow()
     SetConsoleScreenBufferSize(hConsole, coord);
 }
 
-Console::Console(): bitMap{{false}}
+Console::Console()
 {
     intializeWindow();
     showCursor(false);
@@ -97,25 +97,30 @@ void Console::setCursorPositionBitMap(int x, int y)
     setCursorPositionRaw(x, y);
 }
 
-void Console::renderNextFrame(BitMap& nextBitMap)
+void Console::drawBlock(int x, int y)
 {
-    for (int y = 0; y < HEIGHT; y++)
+    if (x < 0 || x >= WIDTH)
     {
-        for (int x = 0; x < WIDTH; x++)
-        {
-            if (bitMap[y][x] != nextBitMap[y][x])
-            {
-                setCursorPositionBitMap(x, y);
-                if (nextBitMap[y][x])
-                {
-                    std::cout << "[]";
-                }
-                else
-                {
-                    std::cout << "  ";
-                }
-            }
-        }
+        return;
     }
-    bitMap = nextBitMap;
+    if (y < 0 || y >= HEIGHT)
+    {
+        return;
+    }
+    setCursorPositionBitMap(x, y);
+    std::cout << "[]";
+}
+
+void Console::eraseBlock(int x, int y)
+{
+    if (x < 0 || x >= WIDTH)
+    {
+        return;
+    }
+    if (y < 0 || y >= HEIGHT)
+    {
+        return;
+    }
+    setCursorPositionBitMap(x, y);
+    std::cout << "  ";
 }
