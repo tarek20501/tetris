@@ -91,9 +91,13 @@ int main()
         unique_lock<mutex> lock(m);
         cv.wait(lock);
 
-        // Check the event flag and handle accordingly
-        alive = game.tick();
+        if (!game.tick())
+        {
+            break;
+        }
     }
+
+    alive = false;
 
     if (timer.joinable())
     {
