@@ -10,37 +10,50 @@ Game& Game::getInstance()
 	return instance;
 }
 
-void Game::tick()
+bool Game::tick()
 {
 	static int fall = 0;
 
 	switch (direction)
 	{
 	case Direction::Left:
-		piece.setLocation(piece.getLeft());
+		field.setPieceNextLocationLeft(piece);
 		direction = Direction::Neither;
 		break;
 	case Direction::Right:
-		piece.setLocation(piece.getRight());
+		field.setPieceNextLocationRight(piece);
 		direction = Direction::Neither;
 		break;
+	case Direction::Down:
 	case Direction::Neither:
 	default:
 		break;
 	}
 
 	fall = (fall + 1) % FALL_FACTOR;
-	if (fall == 0)
+	if (fall == 0 || direction == Direction::Down)
 	{
-		piece.setLocation(piece.getDown());
+		direction = Direction::Neither;
+		FieldPieceStatus status = field.setPieceNextLocationDown(piece);
+		if (status == FieldPieceStatus::Settled)
+		{
+			piece = Piece();
+			// check field for complete rows
+		}
+		else if (status == FieldPieceStatus::NoMoreRoom)
+		{
+			return false;
+		}
 	}
 
 	piece.move();
+	return true;
 }
 
 Game::Game(): 
 	direction(Direction::Neither),
-	piece()
+	piece(),
+	field()
 {}
 
 void Game::goLeft()
@@ -51,4 +64,9 @@ void Game::goLeft()
 void Game::goRight()
 {
 	direction = Direction::Right;
+}
+
+void Game::goDown()
+{
+	direction = Direction::Down;
 }

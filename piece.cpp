@@ -2,39 +2,51 @@
 
 Piece::Piece():
 	console(Console::getInstance()),
-	nextLocation{0,0},
-	currLocation{0,0}
+	nextLocation{WIDTH / 2 - 1, -1},
+	currLocation{nextLocation}
 {
 	console.drawBlock(currLocation.x, currLocation.y);
+}
+
+Piece& Piece::operator=(const Piece& p)
+{
+	nextLocation = p.nextLocation;
+	currLocation = p.currLocation;
+	return *this;
 }
 
 Location Piece::getRight()
 {
 	return Location{
-		.x = (currLocation.x + 1) % WIDTH,
-		.y = currLocation.y
+		.x = nextLocation.x + 1,
+		.y = nextLocation.y
 	};
 }
 
 Location Piece::getLeft()
 {
 	return Location{
-		.x = (currLocation.x > 0) ? currLocation.x - 1 : WIDTH - 1,
-		.y = currLocation.y
+		.x = nextLocation.x - 1,
+		.y = nextLocation.y
 	};
 }
 
 Location Piece::getDown()
 {
 	return Location{
-		.x = currLocation.x,
-		.y = (currLocation.y + 1) % HEIGHT
+		.x = nextLocation.x,
+		.y = nextLocation.y + 1
 	};
 }
 
-void Piece::setLocation(Location l)
+void Piece::setNextLocation(Location l)
 {
 	nextLocation = l;
+}
+
+Location Piece::getCurrLocation()
+{
+	return currLocation;
 }
 
 void Piece::move()
@@ -46,5 +58,3 @@ void Piece::move()
 		currLocation = nextLocation;
 	}
 }
-
-

@@ -41,6 +41,7 @@ void keyboardThread()
     {
         const int LEFT_ARROW = 75;
         const int RIGHT_ARROW = 77;
+        const int DOWN_ARROW = 80;
         unsigned char ch = _getch(); // get a character from the keyboard
 
         if (ch == 0 || ch == 224) // if the first value is 0 or 224, then it is an arrow key
@@ -54,6 +55,9 @@ void keyboardThread()
                 break;
             case RIGHT_ARROW:
                 game.goRight();
+                break;
+            case DOWN_ARROW:
+                game.goDown();
                 break;
             default:
                 break;
@@ -88,7 +92,7 @@ int main()
         cv.wait(lock);
 
         // Check the event flag and handle accordingly
-        game.tick();
+        alive = game.tick();
     }
 
     if (timer.joinable())

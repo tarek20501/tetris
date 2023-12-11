@@ -16,10 +16,11 @@ private:
 
 public:
 	Piece();
+	Piece& operator=(const Piece&);
 	Location getRight();
 	Location getLeft();
 	Location getDown();
-	void setLocation(Location l);
+	void setNextLocation(Location l);
+	Location getCurrLocation();
 	void move();
 };
-

@@ -4,12 +4,14 @@
 
 #include "console.h"
 #include "piece.h"
+#include "field.h"
 
 enum class Direction
 {
 	Neither,
 	Left,
-	Right
+	Right,
+	Down
 };
 
 /**
@@ -20,6 +22,7 @@ class Game
 private:
 	Piece piece;
 	Direction direction;
+	Field field;
 
 	/**
 	 * @brief: Private constructor to prevent instantiation from outside
@@ -40,8 +43,9 @@ public:
 	/**
 	 * @brief: processes the next frame of the game
 	 */
-	void tick();
+	bool tick();
 
 	void goLeft();
 	void goRight();
+	void goDown();
 };
