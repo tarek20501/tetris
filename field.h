@@ -16,7 +16,11 @@ class Field
 {
 private:
 	BitMap bitmap;
-	bool isInBounds(Location& l);
+	bool isInBounds(const Location& l);
+	bool isInXBounds(const Location& l);
+	bool isInYBounds(const Location& l);
+	bool isCollision(const Location& l);
+
 public:
 	Field();
 	void setPieceNextLocationLeft(Piece& p);

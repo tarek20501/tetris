@@ -1,60 +1,111 @@
 #include "piece.h"
+#include <random>
 
-Piece::Piece():
-	console(Console::getInstance()),
-	nextLocation{WIDTH / 2 - 1, -1},
-	currLocation{nextLocation}
+std::default_random_engine engine(std::random_device{}());
+std::uniform_int_distribution<int> distribution(0, (int)PieceType::NumberOfPieces - 1);
+
+Pieces pieces =
 {
-	console.drawBlock(currLocation.x, currLocation.y);
+	PieceOffsets{Location{ 1, 0 }, Location{ 0,-1 }, Location{ 1,-1 }}, // O
+	PieceOffsets{Location{ 0,-1 }, Location{ 0,-2 }, Location{ 0,-3 }}, // I
+	PieceOffsets{Location{ 1, 0 }, Location{ 1,-1 }, Location{ 2,-1 }}, // S
+	PieceOffsets{Location{-1, 0 }, Location{-1,-1 }, Location{-2,-1 }}, // Z
+	PieceOffsets{Location{-1, 0 }, Location{-1,-1 }, Location{-1,-2 }}, // L
+	PieceOffsets{Location{ 1, 0 }, Location{ 1,-1 }, Location{ 1,-2 }}, // J
+	PieceOffsets{Location{ 0,-1 }, Location{-1,-1 }, Location{ 1,-1 }}, // T
+};
+
+PieceLocations Piece::calculatePieceLocations(Location& l)
+{
+	return PieceLocations
+	{
+		l,
+		l + pieces[(size_t)type][0],
+		l + pieces[(size_t)type][1],
+		l + pieces[(size_t)type][2]
+	};
 }
 
-Piece& Piece::operator=(const Piece& p)
+void Piece::erasePiece(Location& l)
 {
-	nextLocation = p.nextLocation;
-	currLocation = p.currLocation;
-	return *this;
+	PieceLocations locations = calculatePieceLocations(l);
+	for (const Location& l : locations)
+	{
+		console.eraseBlock(l.x, l.y);
+	}
 }
 
-Location Piece::getRight()
+void Piece::drawPiece(Location& l)
 {
-	return Location{
+	PieceLocations locations = calculatePieceLocations(l);
+	for (const Location& l : locations)
+	{
+		console.drawBlock(l.x, l.y);
+	}
+}
+
+Piece::Piece(): console(Console::getInstance())
+{
+	reset();
+}
+
+void Piece::reset()
+{
+	nextLocation = { WIDTH / 2 - 1, -1 };
+	currLocation = nextLocation;
+	type = (PieceType)distribution(engine);
+	drawPiece(currLocation);
+}
+
+PieceLocations Piece::getRight()
+{
+	Location l = 
+	{
 		.x = nextLocation.x + 1,
 		.y = nextLocation.y
 	};
+
+	return calculatePieceLocations(l);
 }
 
-Location Piece::getLeft()
+PieceLocations Piece::getLeft()
 {
-	return Location{
+	Location l = 
+	{
 		.x = nextLocation.x - 1,
 		.y = nextLocation.y
 	};
+
+	return calculatePieceLocations(l);
 }
 
-Location Piece::getDown()
+PieceLocations Piece::getDown()
 {
-	return Location{
+	Location l = 
+	{
 		.x = nextLocation.x,
 		.y = nextLocation.y + 1
 	};
+
+	return calculatePieceLocations(l);
 }
 
-void Piece::setNextLocation(Location l)
+void Piece::setNextLocation(const Location l)
 {
 	nextLocation = l;
 }
 
-Location Piece::getCurrLocation()
+PieceLocations Piece::getCurrLocation()
 {
-	return currLocation;
+	return calculatePieceLocations(currLocation);
 }
 
 void Piece::move()
 {
 	if (nextLocation.x != currLocation.x || nextLocation.y != currLocation.y)
 	{
-		console.eraseBlock(currLocation.x, currLocation.y);
-		console.drawBlock(nextLocation.x, nextLocation.y);
+		erasePiece(currLocation);
+		drawPiece(nextLocation);
 		currLocation = nextLocation;
 	}
 }

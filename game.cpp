@@ -37,7 +37,7 @@ bool Game::tick()
 		FieldPieceStatus status = field.setPieceNextLocationDown(piece);
 		if (status == FieldPieceStatus::Settled)
 		{
-			piece = Piece();
+			piece.reset();
 			// check field for complete rows
 		}
 		else if (status == FieldPieceStatus::NoMoreRoom)
