@@ -24,9 +24,16 @@ enum class PieceType
 	NumberOfPieces
 };
 
+enum class PieceOrientation
+{
+	O0 = 0,
+	O90,
+	O180,
+	O270,
+	NumberOfOrientation
+};
+
 using PieceLocations = const std::array<Location, 4>;
-using PieceOffsets = const std::array<Location, 3>;
-using Pieces = const std::array<PieceOffsets, (size_t)PieceType::NumberOfPieces>;
 
 class Piece
 {
@@ -34,6 +41,7 @@ private:
 	Location currLocation;
 	Location nextLocation;
 	PieceType type;
+	PieceOrientation orientation;
 	Console& console;
 
 	PieceLocations calculatePieceLocations(Location& l);
