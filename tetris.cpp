@@ -39,6 +39,7 @@ void keyboardThread()
     Game& game = Game::getInstance();
     while (alive)
     {
+        const int UP_ARROW = 72;
         const int LEFT_ARROW = 75;
         const int RIGHT_ARROW = 77;
         const int DOWN_ARROW = 80;
@@ -50,6 +51,9 @@ void keyboardThread()
 
             switch (ch)
             {
+            case UP_ARROW:
+                game.goUp();
+                break;
             case LEFT_ARROW:
                 game.goLeft();
                 break;

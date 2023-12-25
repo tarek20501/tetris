@@ -133,6 +133,7 @@
     <ClCompile Include="field.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="piece.cpp" />
+    <ClCompile Include="piece_data.cpp" />
     <ClCompile Include="tetris.cpp" />
   </ItemGroup>
   <ItemGroup>

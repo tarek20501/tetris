@@ -11,7 +11,8 @@ enum class Direction
 	Neither,
 	Left,
 	Right,
-	Down
+	Down,
+	Rotate,
 };
 
 /**
@@ -45,6 +46,7 @@ public:
 	 */
 	bool tick();
 
+	void goUp();
 	void goLeft();
 	void goRight();
 	void goDown();

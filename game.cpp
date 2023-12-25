@@ -17,11 +17,15 @@ bool Game::tick()
 	switch (direction)
 	{
 	case Direction::Left:
-		field.setPieceNextLocationLeft(piece);
+		field.setPieceNextLocation(piece, std::bind(&Piece::getNextLeftLocations, &piece));
 		direction = Direction::Neither;
 		break;
 	case Direction::Right:
-		field.setPieceNextLocationRight(piece);
+		field.setPieceNextLocation(piece, std::bind(&Piece::getNextRightLocations, &piece));
+		direction = Direction::Neither;
+		break;
+	case Direction::Rotate:
+		field.setPieceNextOrientation(piece);
 		direction = Direction::Neither;
 		break;
 	case Direction::Down:
@@ -34,7 +38,7 @@ bool Game::tick()
 	if (fall == 0 || direction == Direction::Down)
 	{
 		direction = Direction::Neither;
-		FieldPieceStatus status = field.setPieceNextLocationDown(piece);
+		FieldPieceStatus status = field.handleFalling(piece);
 		if (status == FieldPieceStatus::Settled)
 		{
 			piece.reset();
@@ -55,6 +59,11 @@ Game::Game():
 	piece(),
 	field()
 {}
+
+void Game::goUp()
+{
+	direction = Direction::Rotate;
+}
 
 void Game::goLeft()
 {

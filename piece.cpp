@@ -1,15 +1,9 @@
 #include "piece.h"
 #include <random>
 
-
-using Offsets = const std::array<Location, 3>;
-using Pieces = const std::array<Offsets, (size_t)PieceType::NumberOfPieces>;
-using PiecesRotated = const std::array<Pieces, (size_t)PieceOrientation::NumberOfOrientation>;
-
 std::default_random_engine engine(std::random_device{}());
 std::uniform_int_distribution<int> typeDistribution(0, (int)PieceType::NumberOfPieces - 1);
 std::uniform_int_distribution<int> orientationDistribution(0, (int)PieceOrientation::NumberOfOrientation - 1);
-
 
 const constexpr Location rotateOffset(Location offset, PieceOrientation o)
 {
@@ -65,29 +59,29 @@ PiecesRotated piecesRotated =
 	rotatePieces(pieces, PieceOrientation::O270),
 };
 
-PieceLocations Piece::calculatePieceLocations(Location& l)
+PieceLocations Piece::calculatePieceLocations(Location& l, PieceOrientation o)
 {
 	return PieceLocations
 	{
 		l,
-		l + piecesRotated[(size_t)orientation][(size_t)type][0],
-		l + piecesRotated[(size_t)orientation][(size_t)type][1],
-		l + piecesRotated[(size_t)orientation][(size_t)type][2]
+		l + piecesRotated[(size_t)o][(size_t)type][0],
+		l + piecesRotated[(size_t)o][(size_t)type][1],
+		l + piecesRotated[(size_t)o][(size_t)type][2]
 	};
 }
 
-void Piece::erasePiece(Location& l)
+void Piece::erasePiece(Location& l, PieceOrientation& o)
 {
-	PieceLocations locations = calculatePieceLocations(l);
+	PieceLocations locations = calculatePieceLocations(l, o);
 	for (const Location& l : locations)
 	{
 		console.eraseBlock(l.x, l.y);
 	}
 }
 
-void Piece::drawPiece(Location& l)
+void Piece::drawPiece(Location& l, PieceOrientation& o)
 {
-	PieceLocations locations = calculatePieceLocations(l);
+	PieceLocations locations = calculatePieceLocations(l, o);
 	for (const Location& l : locations)
 	{
 		console.drawBlock(l.x, l.y);
@@ -104,11 +98,12 @@ void Piece::reset()
 	nextLocation = { WIDTH / 2 - 1, -1 };
 	currLocation = nextLocation;
 	type = (PieceType)typeDistribution(engine);
-	orientation = (PieceOrientation)orientationDistribution(engine);
-	drawPiece(currLocation);
+	nextOrientation = (PieceOrientation)orientationDistribution(engine);
+	currOrientation = nextOrientation;
+	drawPiece(currLocation, currOrientation);
 }
 
-PieceLocations Piece::getRight()
+PieceLocations Piece::getNextRightLocations()
 {
 	Location l = 
 	{
@@ -116,10 +111,10 @@ PieceLocations Piece::getRight()
 		.y = nextLocation.y
 	};
 
-	return calculatePieceLocations(l);
+	return calculatePieceLocations(l, nextOrientation);
 }
 
-PieceLocations Piece::getLeft()
+PieceLocations Piece::getNextLeftLocations()
 {
 	Location l = 
 	{
@@ -127,10 +122,10 @@ PieceLocations Piece::getLeft()
 		.y = nextLocation.y
 	};
 
-	return calculatePieceLocations(l);
+	return calculatePieceLocations(l, nextOrientation);
 }
 
-PieceLocations Piece::getDown()
+PieceLocations Piece::getNextDownLocations()
 {
 	Location l = 
 	{
@@ -138,7 +133,12 @@ PieceLocations Piece::getDown()
 		.y = nextLocation.y + 1
 	};
 
-	return calculatePieceLocations(l);
+	return calculatePieceLocations(l, nextOrientation);
+}
+
+PieceLocations Piece::getNextOrientationLocations()
+{
+	return calculatePieceLocations(nextLocation, nextOrientation++);
 }
 
 void Piece::setNextLocation(const Location l)
@@ -146,17 +146,30 @@ void Piece::setNextLocation(const Location l)
 	nextLocation = l;
 }
 
-PieceLocations Piece::getCurrLocation()
+void Piece::setNextOrientation()
 {
-	return calculatePieceLocations(currLocation);
+	nextOrientation = nextOrientation++;
+}
+
+PieceLocations Piece::getCurrLocations()
+{
+	return calculatePieceLocations(currLocation, currOrientation);
 }
 
 void Piece::move()
 {
-	if (nextLocation.x != currLocation.x || nextLocation.y != currLocation.y)
+	if (nextLocation.x != currLocation.x || 
+		nextLocation.y != currLocation.y ||
+		nextOrientation != currOrientation)
 	{
-		erasePiece(currLocation);
-		drawPiece(nextLocation);
+		erasePiece(currLocation, currOrientation);
+		drawPiece(nextLocation, nextOrientation);
 		currLocation = nextLocation;
+		currOrientation = nextOrientation;
 	}
+}
+
+PieceOrientation operator++(PieceOrientation& po, int)
+{
+	return static_cast<PieceOrientation>((static_cast<int>(po) + 1) % static_cast<int>(PieceOrientation::NumberOfOrientation));
 }

@@ -33,7 +33,13 @@ enum class PieceOrientation
 	NumberOfOrientation
 };
 
+PieceOrientation operator++(PieceOrientation& po, int);
+
 using PieceLocations = const std::array<Location, 4>;
+using Offsets = const std::array<Location, 3>;
+using Pieces = const std::array<Offsets, (size_t)PieceType::NumberOfPieces>;
+using PiecesRotated = const std::array<Pieces, (size_t)PieceOrientation::NumberOfOrientation>;
+
 
 class Piece
 {
@@ -41,20 +47,23 @@ private:
 	Location currLocation;
 	Location nextLocation;
 	PieceType type;
-	PieceOrientation orientation;
+	PieceOrientation currOrientation;
+	PieceOrientation nextOrientation;
 	Console& console;
 
-	PieceLocations calculatePieceLocations(Location& l);
-	void erasePiece(Location& l);
-	void drawPiece(Location& l);
+	PieceLocations calculatePieceLocations(Location& l, PieceOrientation o);
+	void erasePiece(Location& l, PieceOrientation& o);
+	void drawPiece(Location& l, PieceOrientation& o);
 
 public:
 	Piece();
 	void reset();
-	PieceLocations getRight();
-	PieceLocations getLeft();
-	PieceLocations getDown();
+	PieceLocations getNextRightLocations();
+	PieceLocations getNextLeftLocations();
+	PieceLocations getNextDownLocations();
+	PieceLocations getNextOrientationLocations();
 	void setNextLocation(Location l);
-	PieceLocations getCurrLocation();
+	void setNextOrientation();
+	PieceLocations getCurrLocations();
 	void move();
 };
