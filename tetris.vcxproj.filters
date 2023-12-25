@@ -26,7 +26,7 @@
     <ClCompile Include="field.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="piece_data.cpp">
+    <ClCompile Include="pieces_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,6 +41,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="field.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pieces_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

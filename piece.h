@@ -36,10 +36,6 @@ enum class PieceOrientation
 PieceOrientation operator++(PieceOrientation& po, int);
 
 using PieceLocations = const std::array<Location, 4>;
-using Offsets = const std::array<Location, 3>;
-using Pieces = const std::array<Offsets, (size_t)PieceType::NumberOfPieces>;
-using PiecesRotated = const std::array<Pieces, (size_t)PieceOrientation::NumberOfOrientation>;
-
 
 class Piece
 {
