@@ -1,4 +1,5 @@
 #include <functional>
+#include <numeric>
 #include "field.h"
 
 bool Field::isInBounds(const Location& l)
@@ -50,7 +51,34 @@ bool Field::isCollision(const Location& l)
 	return false;
 }
 
-Field::Field(): bitmap{{false}}
+void Field::collapseRow(int y)
+{
+	for (int i = y; i > 0; i--)
+	{
+		bitmap[i] = bitmap[i - 1];
+	}
+	bitmap[0].fill(false);
+}
+
+void Field::renderTillY(int y)
+{
+	for (int j = 0; j <= y; j++)
+	{
+		for (int i = 0; i < WIDTH; i++)
+		{
+			if (bitmap[j][i])
+			{
+				console.drawBlock(i, j);
+			}
+			else
+			{
+				console.eraseBlock(i, j);
+			}
+		}
+	}
+}
+
+Field::Field(): bitmap{{false}}, console(Console::getInstance())
 {
 }
 
@@ -113,4 +141,22 @@ FieldPieceStatus Field::handleFalling(Piece& p)
 
 	p.setNextLocation(locations[0]);
 	return FieldPieceStatus::Falling;
+}
+
+void Field::eraseCompleteRows()
+{
+	for (int y = 0; y < HEIGHT; y++)
+	{
+		bool rowIsallTrue = std::accumulate(bitmap[y].begin(), bitmap[y].end(), true,
+			[](bool acc, bool value)
+			{ 
+				return acc && value; 
+			});
+
+		if (rowIsallTrue)
+		{
+			collapseRow(y);
+			renderTillY(y);
+		}
+	}
 }

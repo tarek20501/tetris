@@ -42,7 +42,7 @@ bool Game::tick()
 		if (status == FieldPieceStatus::Settled)
 		{
 			piece.reset();
-			// check field for complete rows
+			 field.eraseCompleteRows();
 		}
 		else if (status == FieldPieceStatus::NoMoreRoom)
 		{
