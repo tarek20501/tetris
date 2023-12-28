@@ -1,15 +1,11 @@
-// tetris.cpp : This file contains the 'main' function. Program execution begins and ends there.
-
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <condition_variable>
 #include <mutex>
-#include <Windows.h>
-#include <conio.h>
+#include <conio.h> // @FIXME Windows specific library
 
 #include "game.h"
-#include "console.h"
 
 using namespace std;
 
@@ -17,37 +13,42 @@ condition_variable cv;      // condition variable to signal the main thread
 mutex m;                    // mutex to protect the shared data
 bool alive = true;          // game is running
 
-// A function to handle the timer event
+/**
+ * @brief A function to handle the timer event
+ *
+ * @param interval for notifying the main thread in milliseconds
+ */
 void timerThread(int interval)
 {
     while (alive)
     {
-        // Sleep for the specified interval
         this_thread::sleep_for(chrono::milliseconds(interval));
 
-        // Lock the mutex and set the event flag to 1
         lock_guard<mutex> lock(m);
 
-        // Notify the main thread
         cv.notify_one();
     }
 }
 
-// A function to handle the key press event
+/**
+ * @brief A function to handle the key press event
+ */ 
 void keyboardThread()
 {
     Game& game = Game::getInstance();
     while (alive)
     {
-        const int UP_ARROW = 72;
-        const int LEFT_ARROW = 75;
-        const int RIGHT_ARROW = 77;
-        const int DOWN_ARROW = 80;
+        constexpr int UP_ARROW = 72;
+        constexpr int LEFT_ARROW = 75;
+        constexpr int RIGHT_ARROW = 77;
+        constexpr int DOWN_ARROW = 80;
+        constexpr int ESC_KEY = 27;
         unsigned char ch = _getch(); // get a character from the keyboard
 
-        if (ch == 0 || ch == 224) // if the first value is 0 or 224, then it is an arrow key
+        // if the first value is 0 or 224, then it is an arrow key
+        if (ch == 0 || ch == 224)
         {
-            ch = _getch(); // get the second value of the arrow key
+            ch = _getch();
 
             switch (ch)
             {
@@ -67,31 +68,28 @@ void keyboardThread()
                 break;
             }
         }
-        else if (ch == 27) // if the character is ESC, then exit the loop
+        else if (ch == ESC_KEY)
         {
             alive = false;
         }
     }
 }
 
+/**
+ * @brief Main Function  
+ */
 int main()
 {
-    // Create a thread for the timer event
     thread timer(timerThread, FRAME_PERIOD_MS);
-
-    // Create a thread for the key press event
     thread keyboard(keyboardThread);
 
-    // Detach the threads
     timer.detach();
     keyboard.detach();
 
     Game& game = Game::getInstance();
 
-    // Main loop
     while (alive)
     {
-        // Wait for a notification from the condition variable
         unique_lock<mutex> lock(m);
         cv.wait(lock);
 

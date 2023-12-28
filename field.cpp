@@ -1,5 +1,6 @@
 #include <functional>
 #include <numeric>
+
 #include "field.h"
 
 bool Field::isInBounds(const Location& l)
@@ -112,7 +113,7 @@ void Field::setPieceNextOrientation(Piece& p)
 	p.setNextOrientation();
 }
 
-FieldPieceStatus Field::handleFalling(Piece& p)
+Field::PieceStatus Field::handleFalling(Piece& p)
 {
 	PieceLocations locations = p.getNextDownLocations();
 
@@ -126,7 +127,7 @@ FieldPieceStatus Field::handleFalling(Piece& p)
 			{
 				if (!isInYBounds(cl))
 				{
-					return FieldPieceStatus::NoMoreRoom;
+					return PieceStatus::NoMoreRoom;
 				}
 			}
 
@@ -135,12 +136,12 @@ FieldPieceStatus Field::handleFalling(Piece& p)
 				bitmap[cl.y][cl.x] = true;
 			}
 
-			return FieldPieceStatus::Settled;
+			return PieceStatus::Settled;
 		}
 	}
 
 	p.setNextLocation(locations[0]);
-	return FieldPieceStatus::Falling;
+	return PieceStatus::Falling;
 }
 
 void Field::eraseCompleteRows()

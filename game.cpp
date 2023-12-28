@@ -1,8 +1,6 @@
 #include <iostream>
-#include <Windows.h>
 
 #include "game.h"
-#include "console.h"
 
 Game& Game::getInstance()
 {
@@ -12,24 +10,24 @@ Game& Game::getInstance()
 
 bool Game::tick()
 {
-	static int fall = 0;
+	static int fall = 0; // throttle falling
 
 	switch (direction)
 	{
 	case Direction::Left:
 		field.setPieceNextLocation(piece, std::bind(&Piece::getNextLeftLocations, &piece));
-		direction = Direction::Neither;
+		direction = Direction::None;
 		break;
 	case Direction::Right:
 		field.setPieceNextLocation(piece, std::bind(&Piece::getNextRightLocations, &piece));
-		direction = Direction::Neither;
+		direction = Direction::None;
 		break;
 	case Direction::Rotate:
 		field.setPieceNextOrientation(piece);
-		direction = Direction::Neither;
+		direction = Direction::None;
 		break;
 	case Direction::Down:
-	case Direction::Neither:
+	case Direction::None:
 	default:
 		break;
 	}
@@ -37,14 +35,14 @@ bool Game::tick()
 	fall = (fall + 1) % FALL_FACTOR;
 	if (fall == 0 || direction == Direction::Down)
 	{
-		direction = Direction::Neither;
-		FieldPieceStatus status = field.handleFalling(piece);
-		if (status == FieldPieceStatus::Settled)
+		direction = Direction::None;
+		Field::PieceStatus status = field.handleFalling(piece);
+		if (status == Field::PieceStatus::Settled)
 		{
 			piece.reset();
-			 field.eraseCompleteRows();
+			field.eraseCompleteRows();
 		}
-		else if (status == FieldPieceStatus::NoMoreRoom)
+		else if (status == Field::PieceStatus::NoMoreRoom)
 		{
 			return false;
 		}
@@ -55,7 +53,7 @@ bool Game::tick()
 }
 
 Game::Game(): 
-	direction(Direction::Neither),
+	direction(Direction::None),
 	piece(),
 	field()
 {}
