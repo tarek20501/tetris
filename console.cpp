@@ -1,10 +1,8 @@
 #include <iostream>
 #include <Windows.h>
 
+#include "tetris.h"
 #include "console.h"
-
-constexpr int X_OFFSET = 1;
-constexpr int X_FACTOR = 2;
 
 void Console::intializeWindow()
 {

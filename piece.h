@@ -1,4 +1,7 @@
 #pragma once
+
+#include <array>
+
 #include "console.h"
 
 struct Location

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <array>
 
+#include "tetris.h"
 #include "console.h"
 #include "piece.h"
 

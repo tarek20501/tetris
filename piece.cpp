@@ -1,6 +1,8 @@
+#include <random>
+
+#include "tetris.h"
 #include "piece.h"
 #include "pieces_data.h"
-#include <random>
 
 std::default_random_engine engine(std::random_device{}());
 std::uniform_int_distribution<int> typeDistribution(0, (int)PieceType::NumberOfPieces - 1);

@@ -46,5 +46,8 @@
     <ClInclude Include="pieces_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tetris.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
