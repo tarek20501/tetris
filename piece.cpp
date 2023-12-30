@@ -1,44 +1,42 @@
-#include <random>
-
 #include "tetris.h"
 #include "piece.h"
-#include "pieces_data.h"
+#include "pieces.h"
 
-std::default_random_engine engine(std::random_device{}());
-std::uniform_int_distribution<int> typeDistribution(0, (int)PieceType::NumberOfPieces - 1);
-std::uniform_int_distribution<int> orientationDistribution(0, (int)PieceOrientation::NumberOfOrientation - 1);
-
-PieceLocations Piece::calculatePieceLocations(Location& l, PieceOrientation o)
+Piece::Locations Piece::calculatePieceLocations(Location& l, Orientation o)
 {
 	
-	return PieceLocations
+	return Locations
 	{
 		l,
-		l + piecesData[(size_t)type][(size_t)o][0],
-		l + piecesData[(size_t)type][(size_t)o][1],
-		l + piecesData[(size_t)type][(size_t)o][2]
+		l + Pieces::getInstance().getData()[(size_t)type][(size_t)o][0],
+		l + Pieces::getInstance().getData()[(size_t)type][(size_t)o][1],
+		l + Pieces::getInstance().getData()[(size_t)type][(size_t)o][2]
 	};
 }
 
-void Piece::erasePiece(Location& l, PieceOrientation& o)
+void Piece::erasePiece(Location& l, Orientation& o)
 {
-	PieceLocations locations = calculatePieceLocations(l, o);
+	Locations locations = calculatePieceLocations(l, o);
 	for (const Location& l : locations)
 	{
 		console.eraseBlock(l.x, l.y);
 	}
 }
 
-void Piece::drawPiece(Location& l, PieceOrientation& o)
+void Piece::drawPiece(Location& l, Orientation& o)
 {
-	PieceLocations locations = calculatePieceLocations(l, o);
+	Locations locations = calculatePieceLocations(l, o);
 	for (const Location& l : locations)
 	{
 		console.drawBlock(l.x, l.y);
 	}
 }
 
-Piece::Piece(): console(Console::getInstance())
+Piece::Piece():
+	console(Console::getInstance()),
+	engine(std::random_device{}()),
+	typeDistribution(0, (int)Type::NumberOfPieces - 1),
+	orientationDistribution(0, (int)Orientation::NumberOfOrientation - 1)
 {
 	reset();
 }
@@ -47,13 +45,13 @@ void Piece::reset()
 {
 	nextLocation = { WIDTH / 2 - 1, -1 };
 	currLocation = nextLocation;
-	type = (PieceType)typeDistribution(engine);
-	nextOrientation = (PieceOrientation)orientationDistribution(engine);
+	type = (Type)typeDistribution(engine);
+	nextOrientation = (Orientation)orientationDistribution(engine);
 	currOrientation = nextOrientation;
 	drawPiece(currLocation, currOrientation);
 }
 
-PieceLocations Piece::getNextRightLocations()
+Piece::Locations Piece::getNextRightLocations()
 {
 	Location l = 
 	{
@@ -64,7 +62,7 @@ PieceLocations Piece::getNextRightLocations()
 	return calculatePieceLocations(l, nextOrientation);
 }
 
-PieceLocations Piece::getNextLeftLocations()
+Piece::Locations Piece::getNextLeftLocations()
 {
 	Location l = 
 	{
@@ -75,7 +73,7 @@ PieceLocations Piece::getNextLeftLocations()
 	return calculatePieceLocations(l, nextOrientation);
 }
 
-PieceLocations Piece::getNextDownLocations()
+Piece::Locations Piece::getNextDownLocations()
 {
 	Location l = 
 	{
@@ -86,7 +84,7 @@ PieceLocations Piece::getNextDownLocations()
 	return calculatePieceLocations(l, nextOrientation);
 }
 
-PieceLocations Piece::getNextOrientationLocations()
+Piece::Locations Piece::getNextOrientationLocations()
 {
 	return calculatePieceLocations(nextLocation, nextOrientation++);
 }
@@ -101,7 +99,7 @@ void Piece::setNextOrientation()
 	nextOrientation = nextOrientation++;
 }
 
-PieceLocations Piece::getCurrLocations()
+Piece::Locations Piece::getCurrLocations()
 {
 	return calculatePieceLocations(currLocation, currOrientation);
 }
@@ -119,7 +117,7 @@ void Piece::move()
 	}
 }
 
-PieceOrientation operator++(PieceOrientation& po, int)
+Piece::Orientation operator++(Piece::Orientation& po, int)
 {
-	return static_cast<PieceOrientation>((static_cast<int>(po) + 1) % static_cast<int>(PieceOrientation::NumberOfOrientation));
+	return static_cast<Piece::Orientation>((static_cast<int>(po) + 1) % static_cast<int>(Piece::Orientation::NumberOfOrientation));
 }

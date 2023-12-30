@@ -3,7 +3,7 @@
 
 #include "field.h"
 
-bool Field::isInBounds(const Location& l)
+bool Field::isInBounds(const Piece::Location& l)
 {
 	if (!isInXBounds(l))
 	{
@@ -16,7 +16,7 @@ bool Field::isInBounds(const Location& l)
 	return true;
 }
 
-bool Field::isInXBounds(const Location& l)
+bool Field::isInXBounds(const Piece::Location& l)
 {
 	if (l.x < 0 || l.x >= WIDTH)
 	{
@@ -25,7 +25,7 @@ bool Field::isInXBounds(const Location& l)
 	return true;
 }
 
-bool Field::isInYBounds(const Location& l)
+bool Field::isInYBounds(const Piece::Location& l)
 {
 	if (l.y < 0 || l.y >= HEIGHT)
 	{
@@ -34,7 +34,7 @@ bool Field::isInYBounds(const Location& l)
 	return true;
 }
 
-bool Field::isInYPlayBounds(const Location& l)
+bool Field::isInYPlayBounds(const Piece::Location& l)
 {
 	if (l.y >= HEIGHT)
 	{
@@ -43,7 +43,7 @@ bool Field::isInYPlayBounds(const Location& l)
 	return true;
 }
 
-bool Field::isCollision(const Location& l)
+bool Field::isCollision(const Piece::Location& l)
 {
 	if (isInBounds(l))
 	{
@@ -83,11 +83,11 @@ Field::Field(): bitmap{{false}}, console(Console::getInstance())
 {
 }
 
-void Field::setPieceNextLocation(Piece& p, std::function<PieceLocations()> pieceLocationsMethod)
+void Field::setPieceNextLocation(Piece& p, std::function<Piece::Locations()> pieceLocationsMethod)
 {
-	PieceLocations locations = pieceLocationsMethod();
+	Piece::Locations locations = pieceLocationsMethod();
 
-	for (const Location& l : locations)
+	for (const Piece::Location& l : locations)
 	{
 		if (!isInXBounds(l) || isCollision(l))
 		{
@@ -100,9 +100,9 @@ void Field::setPieceNextLocation(Piece& p, std::function<PieceLocations()> piece
 
 void Field::setPieceNextOrientation(Piece& p)
 {
-	PieceLocations locations = p.getNextOrientationLocations();
+	Piece::Locations locations = p.getNextOrientationLocations();
 
-	for (const Location& l : locations)
+	for (const Piece::Location& l : locations)
 	{
 		if (!isInYPlayBounds(l) || !isInXBounds(l) || isCollision(l))
 		{
@@ -115,15 +115,15 @@ void Field::setPieceNextOrientation(Piece& p)
 
 Field::PieceStatus Field::handleFalling(Piece& p)
 {
-	PieceLocations locations = p.getNextDownLocations();
+	Piece::Locations locations = p.getNextDownLocations();
 
-	for (const Location& l : locations)
+	for (const Piece::Location& l : locations)
 	{
 		if (!isInYPlayBounds(l) || isCollision(l))
 		{
-			PieceLocations currentLocations = p.getCurrLocations();
+			Piece::Locations currentLocations = p.getCurrLocations();
 
-			for (const Location& cl : currentLocations)
+			for (const Piece::Location& cl : currentLocations)
 			{
 				if (!isInYBounds(cl))
 				{
@@ -131,7 +131,7 @@ Field::PieceStatus Field::handleFalling(Piece& p)
 				}
 			}
 
-			for (const Location& cl : currentLocations)
+			for (const Piece::Location& cl : currentLocations)
 			{
 				bitmap[cl.y][cl.x] = true;
 			}

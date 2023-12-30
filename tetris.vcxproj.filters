@@ -26,7 +26,7 @@
     <ClCompile Include="field.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pieces_data.cpp">
+    <ClCompile Include="pieces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -43,7 +43,7 @@
     <ClInclude Include="field.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pieces_data.h">
+    <ClInclude Include="pieces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tetris.h">

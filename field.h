@@ -37,7 +37,7 @@ private:
 	 * 
 	 * @return true if within bounds
 	 */
-	bool isInBounds(const Location& l);
+	bool isInBounds(const Piece::Location& l);
 
 	/**
 	 * @brief check whether given location is in bitmap x bounds
@@ -46,7 +46,7 @@ private:
 	 *
 	 * @return true if within bounds
 	 */
-	bool isInXBounds(const Location& l);
+	bool isInXBounds(const Piece::Location& l);
 
 	/**
 	 * @brief check whether given location is in bitmap y bounds
@@ -55,7 +55,7 @@ private:
 	 *
 	 * @return true if within bounds
 	 */
-	bool isInYBounds(const Location& l);
+	bool isInYBounds(const Piece::Location& l);
 
 	/**
 	 * @brief check whether given location is in bitmap y playable bounds
@@ -64,7 +64,7 @@ private:
 	 *
 	 * @return true if within playable bounds
 	 */
-	bool isInYPlayBounds(const Location& l);
+	bool isInYPlayBounds(const Piece::Location& l);
 
 	/**
 	 * @brief check whether given location is an occupied block
@@ -73,7 +73,7 @@ private:
 	 *
 	 * @return true if block at location is occupied
 	 */
-	bool isCollision(const Location& l);
+	bool isCollision(const Piece::Location& l);
 
 	/**
 	 * @brief delete row at y and shift the upper rows down by one
@@ -104,7 +104,7 @@ public:
 	 * @param p reference to piece to set its next location
 	 * @param pieceLocationsMethod method to get next locations requested by game
 	 */
-	void setPieceNextLocation(Piece& p, std::function<PieceLocations()> pieceLocationsMethod);
+	void setPieceNextLocation(Piece& p, std::function<Piece::Locations()> pieceLocationsMethod);
 
 	/**
 	 * @brief get piece next locations in the next orientation
