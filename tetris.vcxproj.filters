@@ -11,42 +11,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tetris.cpp">
+    <ClCompile Include="src\tetris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
+    <ClCompile Include="src\game\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="console.cpp">
+    <ClCompile Include="src\field\field.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="piece.cpp">
+    <ClCompile Include="src\piece\piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="field.cpp">
+    <ClCompile Include="src\pieces\pieces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pieces.cpp">
+    <ClCompile Include="src\platform\display\console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\keyboard\keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.h">
+    <ClInclude Include="src\tetris.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="console.h">
+    <ClInclude Include="src\game\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="piece.h">
+    <ClInclude Include="src\field\field.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="field.h">
+    <ClInclude Include="src\piece\piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pieces.h">
+    <ClInclude Include="src\pieces\pieces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tetris.h">
+    <ClInclude Include="src\platform\display\console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\keyboard\keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

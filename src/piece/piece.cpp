@@ -41,6 +41,12 @@ Piece::Piece():
 	reset();
 }
 
+Piece& Piece::getInstance()
+{
+	static Piece singleton;
+	return singleton;
+}
+
 void Piece::reset()
 {
 	nextLocation = { WIDTH / 2 - 1, -1 };
@@ -120,4 +126,9 @@ void Piece::move()
 Piece::Orientation operator++(Piece::Orientation& po, int)
 {
 	return static_cast<Piece::Orientation>((static_cast<int>(po) + 1) % static_cast<int>(Piece::Orientation::NumberOfOrientation));
+}
+
+Piece::Location Piece::Location::operator+(Location other)
+{
+	return { x + other.x, y + other.y };
 }
