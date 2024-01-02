@@ -55,7 +55,7 @@ bool Game::tick()
 Game::Game(): 
 	direction(Direction::None),
 	piece(Piece::getInstance()),
-	field()
+	field(Field::getInstance())
 {}
 
 void Game::goUp()

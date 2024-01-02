@@ -26,10 +26,10 @@
     <ClCompile Include="src\pieces\pieces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\display\console.cpp">
+    <ClCompile Include="src\platform\windows\keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\keyboard\keyboard.cpp">
+    <ClCompile Include="src\platform\windows\console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,10 +49,10 @@
     <ClInclude Include="src\pieces\pieces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\display\console.h">
+    <ClInclude Include="src\platform\interface\keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\keyboard\keyboard.h">
+    <ClInclude Include="src\platform\interface\console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\platform\keyboard;$(SolutionDir)src\platform\display;$(SolutionDir)src\field;$(SolutionDir)src\game;$(SolutionDir)src\pieces;$(SolutionDir)src\piece;$(SolutionDir)src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\platform\interface;$(SolutionDir)src\field;$(SolutionDir)src\game;$(SolutionDir)src\pieces;$(SolutionDir)src\piece;$(SolutionDir)src\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,8 +134,8 @@
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\pieces\pieces.cpp" />
     <ClCompile Include="src\piece\piece.cpp" />
-    <ClCompile Include="src\platform\display\console.cpp" />
-    <ClCompile Include="src\platform\keyboard\keyboard.cpp" />
+    <ClCompile Include="src\platform\windows\console.cpp" />
+    <ClCompile Include="src\platform\windows\keyboard.cpp" />
     <ClCompile Include="src\tetris.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,8 +143,8 @@
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\pieces\pieces.h" />
     <ClInclude Include="src\piece\piece.h" />
-    <ClInclude Include="src\platform\display\console.h" />
-    <ClInclude Include="src\platform\keyboard\keyboard.h" />
+    <ClInclude Include="src\platform\interface\console.h" />
+    <ClInclude Include="src\platform\interface\keyboard.h" />
     <ClInclude Include="src\tetris.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

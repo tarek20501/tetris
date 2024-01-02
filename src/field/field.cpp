@@ -83,6 +83,13 @@ Field::Field(): bitmap{{false}}, console(Console::getInstance())
 {
 }
 
+Field& Field::getInstance()
+{
+	static Field singleton;
+
+	return singleton;
+}
+
 void Field::setPieceNextLocation(Piece& p, std::function<Piece::Locations()> pieceLocationsMethod)
 {
 	Piece::Locations locations = pieceLocationsMethod();

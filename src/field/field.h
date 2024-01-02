@@ -89,12 +89,20 @@ private:
 	 */
 	void renderTillY(int y);
 
-public:
 	/**
 	 * @brief initialize bitmap and UI
 	 */
 	Field();
 
+public:
+
+	/**
+	 * @brief getter for the single field instance
+	 *
+	 * @return reference the single field instance
+	 */
+	static Field& getInstance();
+	
 	/**
 	 * @brief get piece next location using pieceLocationsMethod
 	 *        if this next location doesn't cause a collision with

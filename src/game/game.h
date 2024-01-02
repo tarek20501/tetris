@@ -25,7 +25,7 @@ private:
 
 	Piece& piece;		 // the falling piece
 	Direction direction; // holds the commands currently pending
-	Field field;		 // manages the field of the game
+	Field& field;		 // manages the field of the game
 
 	/**
 	 * @brief Private constructor to prevent instantiation from outside
