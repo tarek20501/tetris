@@ -6,7 +6,7 @@
 class Console
 {
 private:
-	constexpr static int X_OFFSET = 1; // Offset for x coordinates
+	constexpr static int X_OFFSET = 2; // Offset for x coordinates
 	constexpr static int X_FACTOR = 2; // factor to multiply x coordinate
 
 	/**

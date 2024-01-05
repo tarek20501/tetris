@@ -10,7 +10,7 @@ void Console::intializeWindow()
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // Create a SMALL_RECT structure that specifies the new window size
-    SMALL_RECT windowSize = { 0, 0, WIDTH * X_FACTOR + X_OFFSET, HEIGHT };
+    SMALL_RECT windowSize = { 0, 0, WIDTH * X_FACTOR + X_OFFSET * 2, HEIGHT + 1};
 
     // Set the console window size using the structure
     SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
@@ -50,18 +50,26 @@ Console::Console()
     showCursor(false);
     for (int y = 0; y < HEIGHT; y++)
     {
-        std::cout << "|";
+        std::cout << "<!";
         for (int x = 0; x < WIDTH; x++)
         {
-            std::cout << "  ";
+            std::cout << " .";
         }
-        std::cout << "|" << std::endl;
+        std::cout << "!>" << std::endl;
     }
-    std::cout << " ";
+    std::cout << "<!";
     for (int x = 0; x < WIDTH; x++)
     {
-        std::cout << "--";
+        std::cout << "==";
     }
+    std::cout << "!>" << std::endl;
+    
+    std::cout << "  ";
+    for (int x = 0; x < WIDTH; x++)
+    {
+        std::cout << "\\/";
+    }
+    std::cout << "  ";
 }
 
 Console& Console::getInstance()
@@ -120,5 +128,5 @@ void Console::eraseBlock(int x, int y)
         return;
     }
     setCursorPositionBitMap(x, y);
-    std::cout << "  ";
+    std::cout << " .";
 }
